@@ -55,7 +55,7 @@ En este repositorio, encontrarás recursos adicionales, como ejemplos de código
 Puedes clonar este repositorio utilizando el siguiente comando:
 
 ```
-git clone https://github.com/tu-usuario/curso-fastapi.git
+[git clone https://github.com/tu-usuario/curso-fastapi.git](https://github.com/AEArmendarizB/FastApi.git)
 ```
 
 Una vez que hayas clonado el repositorio, puedes acceder a los archivos del curso y explorar el código fuente de los ejemplos. Cada módulo tiene su propia carpeta, y dentro de cada carpeta encontrarás archivos y ejemplos específicos. Todo este material estara disponible en la carpeta "Base Material". Tambien podras encontrar anotaciones y replicacion de los ejercicios y proyectos desde mi logica y forma de codificacion en la carpeta "Course" donde he creado un Notion con apuntes relevantes del curso. 
