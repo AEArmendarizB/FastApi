@@ -8,8 +8,8 @@ BOOKS = [
     {'tittle':'Tittle One','author':'Author One','category':'science'},
     {'tittle':'Tittle Two','author':'Author Two','category':'science'},
     {'tittle':'Tittle Three','author':'Author Three','category':'history'},
-    {'tittle':'Tittle Four','author':'Author Four','category':'language'},
-    {'tittle':'Tittle Five','author':'Author Five','category':'math'}
+    {'tittle':'Tittle Four','author':'Author two','category':'language'},
+    {'tittle':'Tittle Five','author':'Author two','category':'math'}
 ]
 
 
@@ -61,3 +61,16 @@ async def delete_book(book_tittle: str):
         if BOOKS[i].get('tittle').casefold() == book_tittle.casefold():
             BOOKS.pop(i)
             break
+
+
+#--------------------
+#Get all books from specific author using path or querry parameters
+#--------------------
+
+@app.get("/books/by_authors/{book_author}")
+async def read_books_by_authors(book_author):
+    return_books = []
+    for book in BOOKS:
+        if book.get('author').casefold() == book_author.casefold():
+            return_books.append(book)
+    return return_books
