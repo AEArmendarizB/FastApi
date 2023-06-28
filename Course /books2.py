@@ -1,5 +1,6 @@
-from fastapi import FastAPI,Body
-from pydantic import BaseModel
+from fastapi import FastAPI
+from pydantic import BaseModel, Field
+from typing import Optional
 
 
 app = FastAPI()
@@ -19,11 +20,11 @@ class Book:
         self.rating = rating
 
 class BookRequest(BaseModel):
-    id: int
-    tittle:str
-    author: str
-    descripcion: str
-    rating: int
+    id: Optional[int]
+    tittle:str = Field(min_length=3)
+    author: str = Field(min_length=1)
+    descripcion: str = Field(min_length=1, max_length=100)
+    rating: int = Field(gt=-1, lt=6) # range between 0-5
 
 
 BOOKS = [
@@ -32,7 +33,7 @@ BOOKS = [
     Book(3,'Master Endpoints', 'Andres','Awesame book',5),
     Book(4,'HP1', 'Author1','Book Decription',2),
     Book(5,'HP2', 'Author2','Book Decription',3),
-    Book(5,'HP3', 'Author3','Book Decription',1)
+    Book(6,'HP3', 'Author3','Book Decription',1)
 ]
 
 
@@ -42,6 +43,16 @@ async def read_all_books():
 
 @app.post("/create-book")
 async def create_book(book_request: BookRequest):
-    new_book = BOOKS(**book_request.dict())
-    BOOKS.append(new_book)
+    new_book = Book(**book_request.dict())
+    BOOKS.append(find_book_id(new_book))
     
+
+def find_book_id(book: Book):
+    book.id = 1 if len(BOOKS) == 0 else BOOKS[-1].id+1
+   
+    # if len(BOOKS) > 0:
+    #     book.id = BOOKS[-1].id +1
+    #     print(BOOKS[-1].id)
+    # else:
+    #     book.id = 1
+    return book
