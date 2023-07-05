@@ -11,13 +11,15 @@ class Book:
     author: str
     descripcion: str
     rating: int
+    publish_date: int
 
-    def __init__(self,id,tittle,author,descripcion,rating):
+    def __init__(self,id,tittle,author,descripcion,rating,publish_date):
         self.id = id
         self.tittle = tittle
         self.autho = author
         self.descripcion = descripcion
         self.rating = rating
+        self.publish_date = publish_date
 
 class BookRequest(BaseModel):
     id: Optional[int] 
@@ -25,6 +27,7 @@ class BookRequest(BaseModel):
     author: str = Field(min_length=1)
     descripcion: str = Field(min_length=1, max_length=100)
     rating: int = Field(gt=-1, lt=6) # range between 0-5
+    publish_date: int = Field(gt=1999, lt=2031) #range between 2000-2031
 
     class Config:
         schema_extra = {
@@ -32,18 +35,19 @@ class BookRequest(BaseModel):
                 'tittle':'A new book',
                 'author': 'Andres',
                 'descripcion': 'A new desciption of a book',
-                'rating':5
+                'rating':5,
+                'publish_date':2023
             }
         }
 
 
 BOOKS = [
-    Book(1,'Computer Science Pro', 'Andres','A very nice book',5),
-    Book(2,'Be Fast with FastAPI', 'Andres','A great book',5),
-    Book(3,'Master Endpoints', 'Andres','Awesame book',5),
-    Book(4,'HP1', 'Author1','Book Decription',2),
-    Book(5,'HP2', 'Author2','Book Decription',3),
-    Book(6,'HP3', 'Author3','Book Decription',1)
+    Book(1,'Computer Science Pro', 'Andres','A very nice book',5,2030),
+    Book(2,'Be Fast with FastAPI', 'Andres','A great book',5,2020),
+    Book(3,'Master Endpoints', 'Andres','Awesame book',5,2028),
+    Book(4,'HP1', 'Author1','Book Decription',2,2030),
+    Book(5,'HP2', 'Author2','Book Decription',3,2027),
+    Book(6,'HP3', 'Author3','Book Decription',1,2026)
 ]
 
 
@@ -84,6 +88,15 @@ async def delete_book(book_id: int):
         if BOOKS[i].id == book_id:
             BOOKS.pop(i)
             break
+
+@app.get("/books/publish_date/")
+async def read_books_by_publish_date(publish_date: int):
+    book_to_return = []
+    for book in BOOKS: 
+        if book.publish_date == publish_date:
+            book_to_return.append(book)
+    return book_to_return
+
 
 
 def find_book_id(book: Book):
